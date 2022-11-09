@@ -3,67 +3,55 @@ import { useState } from "react";
 import Axios from "axios";
 
 function App() {
-  const [InterviewerName, setInterviewerName] = useState("");
-  const [IntervieweeName, setIntervieweeName] = useState("");
-  const [StartTime, setStartTime] = useState("");
-  const [EndTime, setEndTime] = useState("");
+  const [interviewer, setInterviewer] = useState("");
+  const [interviewee, setInterviewee] = useState(0);
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
 
-  const [interviewList, setInterviewList] = useState([]);
 
-  const createInterview = () => {
+  const [interviewList, setinterviewList] = useState([]);
+
+  const addInterview = () => {
     Axios.post("http://localhost:3001/create", {
-      InterviewerName: InterviewerName,
-      IntervieweeName: IntervieweeName,
-      StartTime: StartTime,
-      EndTime: EndTime,
-
-      
-
+      interviewer: interviewer,
+      interviewee: interviewee,
+      startTime: startTime,
+      endTime: endTime,
     }).then(() => {
-      setInterviewList([
+      setinterviewList([
         ...interviewList,
         {
-          InterviewerName: InterviewerName,
-          IntervieweeName: IntervieweeName,
-          StartTime: StartTime,
-          EndTime: EndTime,
+          interviewer: interviewer,
+          interviewee: interviewee,
+          startTime: startTime,
+          endTime: endTime,
         },
       ]);
     });
   };
 
-  const getInterviews = () => {
-    Axios.get("http://localhost:3001/employees").then((response) => {
-      setInterviewList(response.data);
-    });
-  };
-
-  const deleteEmployee = (id) => {
-    Axios.delete(`http://localhost:3001/delete/${id}`).then((response) => {
-      setInterviewList(
-        interviewList.filter((val) => {
-          return val.id !== id;
-        })
-      );
+  const getInterview = () => {
+    Axios.get("http://localhost:3001/interviews").then((response) => {
+      setinterviewList(response.data);
     });
   };
 
   return (
     <div className="App">
       <div className="information">
-        <h1><u>Interview Creation Tool</u></h1>
-        <label>Interviewer Name:</label>
+        <h1><u>Interview Creation Portal</u></h1>
+        <label>Interviewer:</label>
         <input
           type="text"
           onChange={(event) => {
-            setInterviewerName(event.target.value);
+            setInterviewer(event.target.value);
           }}
         />
-        <label>Interviewee Name:</label>
+        <label>Interviewee:</label>
         <input
           type="text"
           onChange={(event) => {
-            setIntervieweeName(event.target.value);
+            setInterviewee(event.target.value);
           }}
         />
         <label>Start Time:</label>
@@ -72,28 +60,28 @@ function App() {
           onChange={(event) => {
             setStartTime(event.target.value);
           }}
-        /> 
+        />
         <label>End Time:</label>
         <input
           type="datetime-local"
           onChange={(event) => {
             setEndTime(event.target.value);
           }}
+      
         />
-
-        <button onClick={createInterview}>Create Interview</button>
+        <button onClick={addInterview}>Add Interview</button>
       </div>
-      <div className="showInterviews">
-        <button onClick={getInterviews}>Show Interviews</button>
+      <div className="interviews">
+        <button onClick={getInterview}>Show Interviews</button>
 
         {interviewList.map((val, key) => {
           return (
-            <div className="showInterviews">
+            <div className="interview">
               <div>
-                <h3>Interviewer Name: {val.InterviewerName}</h3>
-                <h3>Interviewee Name: {val.IntervieweeName}</h3>
-                <h3>Start Time: {val.StartTime}</h3>
-                <h3>End Time: {val.EndTime}</h3>
+                <h3>Interviewer: {val.interviewer}</h3>
+                <h3>Interviewee: {val.interviewee}</h3>
+                <h3>Start Time: {val.startTime}</h3>
+                <h3>End Time: {val.endTime}</h3>
               </div>
             </div>
           );
