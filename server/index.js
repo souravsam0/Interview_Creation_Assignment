@@ -10,18 +10,18 @@ const db = mysql.createConnection({
   user: "root",
   host: "localhost",
   password: "",
-  database: "employeeSystem",
+  database: "interviewsystem",
 });
 
 app.post("/create", (req, res) => {
-  const InterviewerName = req.body.InterviewerName;
-  const IntervieweeName = req.body.IntervieweeName;
-  const StartTime = req.body.StartTime;
-  const EndTime = req.body.EndTime;
+  const interviewer = req.body.interviewer;
+  const interviewee = req.body.interviewee;
+  const startTime = req.body.startTime;
+  const endTime = req.body.endTime;
 
   db.query(
-    "INSERT INTO system (Interviewer, Interviewee, StartTime, EndTime) VALUES (?,?,?,?)",
-    [InterviewerName, IntervieweeName, StartTime, EndTime],
+    "INSERT INTO interviews (interviewer, interviewee, startTime, endTime) VALUES (?,?,?,?)",
+    [interviewer, interviewee, startTime, endTime],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -32,8 +32,8 @@ app.post("/create", (req, res) => {
   );
 });
 
-app.get("/employees", (req, res) => {
-  db.query("SELECT * FROM system", (err, result) => {
+app.get("/interviews", (req, res) => {
+  db.query("SELECT * FROM interviews", (err, result) => {
     if (err) {
       console.log(err);
     } else {
@@ -43,17 +43,8 @@ app.get("/employees", (req, res) => {
 });
 
 
-app.delete("/delete/:id", (req, res) => {
-  const id = req.params.id;
-  db.query("DELETE FROM employeesystem.system WHERE Interviewer = ?", id, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send(result);
-    }
-  });
-});
 
 app.listen(3001, () => {
-  console.log("Server running at port 3001");
+  console.log("Yey, your server is running on port 3001");
 });
+
